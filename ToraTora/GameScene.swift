@@ -9,30 +9,12 @@
 import SpriteKit
 import AVFoundation
 
-struct physicsCategory {
-    static let player: UInt32 = 0b1
-    static let enemy: UInt32 = 0b10
-    static let enemyProjectile: UInt32 = 0b11
-    static let playerProjectile: UInt32 = 0b100
-    static let enemyBattleShip: UInt32 = 0b101
-    static let germanPlane: UInt32 = 0b110
-}
-
-struct SoundFile {
-    static let BackgroundMusic = "CheeZeeJungle.caf"
-    static let FireProjectile = "gunshot.mp3"
-    static let Explode = "Explosion.wav"
-    static let Rocket = "missile01.mp3"
-    static let Missile = "missile02.mp3"
-}
-
 let textColorHUD = UIColor(displayP3Red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0)
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    private var player : SKSpriteNode?
-    private var projectile : SKSpriteNode?
-    private var enemy : SKSpriteNode?
+    private var player : PlayerNode?
+    private var projectile : PlayerProjectileNode?
     
     private var scoreLabel : SKLabelNode?
     private var mainLabel : SKLabelNode?
@@ -46,8 +28,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var enemyBattleShipSpawnRate = 10.0
     private var enemyProjectileSpeed = 2.0
     private var enemyFireProjectileRate = 0.5
-    
-    private var treeGroupSpawnRate = 0.2
     
     private var playerIsAlive = true
     private var score = 0
@@ -74,9 +54,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         spawnScoreLabel()
         spawnMainLabel()
         spawnPlayerProjectile()
-        spawnEnemy()
         firePlayerProjectile()
-        randomEnemyTimerSpawn()
+        randomAmericanPlaneTimerSpawn()
         randomEnemyBattleShipTimerSpawn()
         randomGermanPlaneTimerSpawn()
         updateScore()
@@ -110,7 +89,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let firstBody : SKPhysicsBody = contact.bodyA
         let secondBody : SKPhysicsBody = contact.bodyB
         
-        if (((firstBody.categoryBitMask == physicsCategory.playerProjectile) && (secondBody.categoryBitMask == physicsCategory.enemy)) || ((firstBody.categoryBitMask == physicsCategory.enemy) && (secondBody.categoryBitMask == physicsCategory.playerProjectile))) {
+        if (((firstBody.categoryBitMask == physicsCategory.playerProjectile) && (secondBody.categoryBitMask == physicsCategory.enemy)) ||
+            ((firstBody.categoryBitMask == physicsCategory.enemy) && (secondBody.categoryBitMask == physicsCategory.playerProjectile))) {
             spawnEnemyExplosion(enemyTemp: firstBody.node as! SKSpriteNode)
             projectileCollision(enemyTemp: firstBody.node as! SKSpriteNode, projectileTemp: secondBody.node as! SKSpriteNode)
         }
@@ -120,13 +100,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             projectileCollision(enemyTemp: firstBody.node as! SKSpriteNode, projectileTemp: secondBody.node as! SKSpriteNode)
         }
         
-        if (((firstBody.categoryBitMask == physicsCategory.enemy) && (secondBody.categoryBitMask == physicsCategory.player)) || ((firstBody.categoryBitMask == physicsCategory.player) && (secondBody.categoryBitMask == physicsCategory.enemy))) {
+        if (((firstBody.categoryBitMask == physicsCategory.enemy) && (secondBody.categoryBitMask == physicsCategory.player)) ||
+            ((firstBody.categoryBitMask == physicsCategory.player) && (secondBody.categoryBitMask == physicsCategory.enemy))) {
             spawnPlayerExplosion(playerTemp: firstBody.node as! SKSpriteNode)
             spawnEnemyExplosion(enemyTemp: secondBody.node as! SKSpriteNode)
             enemyPlayerCollision(enemyTemp: firstBody.node as! SKSpriteNode, playerTemp: secondBody.node as! SKSpriteNode)
         }
         
-        if (((firstBody.categoryBitMask == physicsCategory.player) && (secondBody.categoryBitMask == physicsCategory.enemyProjectile)) || ((firstBody.categoryBitMask == physicsCategory.enemyProjectile) && (secondBody.categoryBitMask == physicsCategory.player))) {
+        if (((firstBody.categoryBitMask == physicsCategory.player) && (secondBody.categoryBitMask == physicsCategory.enemyProjectile)) ||
+            ((firstBody.categoryBitMask == physicsCategory.enemyProjectile) && (secondBody.categoryBitMask == physicsCategory.player))) {
             spawnPlayerExplosion(playerTemp: firstBody.node as! SKSpriteNode)
             enemyPlayerCollision(enemyTemp: firstBody.node as! SKSpriteNode, playerTemp: secondBody.node as! SKSpriteNode)
         }
@@ -135,8 +117,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             spawnEnemyExplosion(enemyTemp: firstBody.node as! SKSpriteNode)
             enemyPlayerProjectileCollision(enemyProjectileTemp: firstBody.node as! SKSpriteNode, playerProjectileTemp: secondBody.node as! SKSpriteNode)
         }
-        
-        
     }
     
     fileprivate func projectileCollision(enemyTemp: SKSpriteNode, projectileTemp: SKSpriteNode) {
@@ -173,15 +153,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     fileprivate func spawnPlayer() {
-        player = SKSpriteNode(imageNamed: "tora_tora_bida_plane_120px")
-        player?.position = CGPoint(x: self.frame.midX, y: playerYPosition)
-        player?.physicsBody = SKPhysicsBody(rectangleOf: (player?.size)!)
-        player?.physicsBody?.affectedByGravity = false
-        player?.physicsBody?.categoryBitMask = physicsCategory.player
-        player?.physicsBody?.contactTestBitMask = physicsCategory.enemy
-        player?.physicsBody?.collisionBitMask = 0
-        player?.physicsBody?.isDynamic = false
-        player?.zPosition = 1000
+        let pos = CGPoint(x: self.frame.midX, y: playerYPosition)
+        player = PlayerNode(imageNamed: "tora_tora_bida_plane_120px", initialPosition: pos)
         self.addChild(player!)
     }
     
@@ -205,84 +178,51 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     fileprivate func spawnPlayerProjectile() {
-        projectile = SKSpriteNode(color: UIColor.white, size: CGSize(width: 5, height: 10))
-        projectile!.position = CGPoint(x: (player?.position.x)!, y: (player?.position.y)!)
-        projectile?.physicsBody = SKPhysicsBody(rectangleOf: (projectile?.size)!)
-        projectile?.physicsBody?.affectedByGravity = false
-        projectile?.physicsBody?.categoryBitMask = physicsCategory.playerProjectile
-        projectile?.physicsBody?.contactTestBitMask = physicsCategory.enemy | physicsCategory.enemyProjectile
-        projectile?.physicsBody?.collisionBitMask = 0
-        projectile?.physicsBody?.isDynamic = false
-        projectile?.zPosition = -1
+        let position = CGPoint(x: (player?.position.x)!, y: (player?.position.y)!)
+        projectile = PlayerProjectileNode(imageNamed: "projectile", initialPosition: position)
         
         let moveForward = SKAction.moveTo(y: 1000, duration: playerProjectileSpeed)
         let playSound = SKAction.run{ self.run(self.fireProjectileSoundAction) }
         let group = SKAction.group([moveForward, playSound])
         let destroy = SKAction.removeFromParent()
         
-        projectile!.run(SKAction.sequence([group, destroy]))
+        projectile?.run(SKAction.sequence([group, destroy]))
         self.addChild(projectile!)
     }
     
-    fileprivate func spawnEnemy() {
-        // make sure x coordinate is within screen bounds
-        let x = (screenWidthFromMid > 100) ? (screenWidthFromMid - 100) : screenWidthFromMid
-        let xPosition = Int.random(in: -x ... x)
-        enemy = SKSpriteNode(imageNamed: "tora_tora_kalaban_plane_100px")
-        enemy!.position = CGPoint(x: xPosition, y: screenHeightFromMid)
-        enemy?.physicsBody = SKPhysicsBody(rectangleOf: enemy!.size)
-        enemy?.physicsBody?.affectedByGravity = false
-        enemy?.physicsBody?.categoryBitMask = physicsCategory.enemy
-        enemy?.physicsBody?.contactTestBitMask = physicsCategory.playerProjectile
-        enemy?.physicsBody?.collisionBitMask = 0
-        enemy?.physicsBody?.allowsRotation = false
-        enemy?.physicsBody?.isDynamic = true
-        
-        let yPos = CGFloat(-1 * screenHeightFromMid)
-        let moveForward = SKAction.moveTo(y: yPos, duration: enemySpeed)
-        let fire = SKAction.run {
-            self.fireEnemyProjectile(enemyTemp: self.enemy!, repeatCount: 1)
-        }
-        let destroy = SKAction.removeFromParent()
-        
-        enemy?.run(SKAction.sequence([moveForward, fire, destroy]))
-        self.addChild(enemy!)
+    fileprivate func spawnAmericanEnemyPlane() {
+        let americanPlane = EnemyAmericanPlaneNode(imageNamed: "tora_tora_kalaban_plane_100px", initialPosition: self.enemyPlanePosition())
+        self.runEnemyAction(enemyTemp: americanPlane)
+        self.addChild(americanPlane)
     }
     
-    fileprivate func spawnGermanPlane() {
-        let germanPlane = SKSpriteNode(imageNamed: "german_plane_100px")
-        let x = (screenWidthFromMid > 100) ? (screenWidthFromMid - 100) : screenWidthFromMid
-        let xPosition = Int.random(in: -x ... x)
-        
-        germanPlane.position = CGPoint(x: xPosition, y: screenHeightFromMid)
-        germanPlane.physicsBody = SKPhysicsBody(rectangleOf: germanPlane.size)
-        germanPlane.physicsBody?.affectedByGravity = false
-        germanPlane.physicsBody?.categoryBitMask = physicsCategory.germanPlane
-        germanPlane.physicsBody?.contactTestBitMask = physicsCategory.playerProjectile
-        germanPlane.physicsBody?.collisionBitMask = 0
-        germanPlane.physicsBody?.allowsRotation = false
-        germanPlane.physicsBody?.isDynamic = true
-        
-        let yPos = CGFloat(-1 * screenHeightFromMid)
-        let moveForward = SKAction.moveTo(y: yPos, duration: enemySpeed)
-        let fire = SKAction.run {
-            self.fireEnemyProjectile(enemyTemp: germanPlane, repeatCount: 1)
-        }
-        let destroy = SKAction.removeFromParent()
-        germanPlane.run(SKAction.sequence([moveForward, fire, destroy]))
+    fileprivate func spawnEnemyGermanPlane() {
+        let germanPlane = EnemyGermanPlaneNode(imageNamed: "german_plane_100px", initialPosition: self.enemyPlanePosition())
+        self.runEnemyAction(enemyTemp: germanPlane)
         self.addChild(germanPlane)
     }
     
+    fileprivate func enemyPlanePosition() -> CGPoint {
+        // make sure x coordinate is within screen bounds
+        let x = (screenWidthFromMid > 100) ? (screenWidthFromMid - 100) : screenWidthFromMid
+        let xPosition = Int.random(in: -x ... x)
+        return CGPoint(x: xPosition, y: screenHeightFromMid)
+    }
+    
+    fileprivate func runEnemyAction(enemyTemp: SKSpriteNode) {
+        let yPos = CGFloat(-1 * screenHeightFromMid)
+        let moveForward = SKAction.moveTo(y: yPos, duration: enemySpeed)
+        let fire = SKAction.run {
+            self.fireEnemyProjectile(enemyTemp: enemyTemp, repeatCount: 1)
+        }
+        let group = SKAction.group([moveForward, fire])
+        let destroy = SKAction.removeFromParent()
+        enemyTemp.run(SKAction.sequence([group, destroy]))
+    }
+    
     fileprivate func spawnEnemyProjectile(enemyTemp: SKSpriteNode) {
-        let enemyProjectile = SKSpriteNode(imageNamed: "missile")
-        enemyProjectile.position = CGPoint(x: enemyTemp.position.x, y: enemyTemp.position.y)
-        enemyProjectile.physicsBody = SKPhysicsBody(rectangleOf: enemyProjectile.size)
-        enemyProjectile.physicsBody?.affectedByGravity = false
-        enemyProjectile.physicsBody?.categoryBitMask = physicsCategory.enemyProjectile
-        enemyProjectile.physicsBody?.contactTestBitMask = physicsCategory.player
-        enemyProjectile.physicsBody?.collisionBitMask = 0
-        enemyProjectile.physicsBody?.isDynamic = true
-        enemyProjectile.zPosition = -1
+        let position = CGPoint(x: enemyTemp.position.x, y: enemyTemp.position.y)
+        let enemyProjectile = EnemyProjectileNode(imageNamed: "missile", initialPosition: position)
         
         let moveForward = SKAction.moveTo(y: -1000, duration: enemyProjectileSpeed)
         let playSound = SKAction.run { self.run(self.missileSoundAction) }
@@ -294,15 +234,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     fileprivate func spawnEnemyBattleShipProjectile(enemyTemp: SKSpriteNode) {
-        let enemyProjectile = SKSpriteNode(imageNamed: "missile30x80")
-        enemyProjectile.position = CGPoint(x: enemyTemp.position.x, y: enemyTemp.position.y)
-        enemyProjectile.physicsBody = SKPhysicsBody(rectangleOf: enemyProjectile.size)
-        enemyProjectile.physicsBody?.affectedByGravity = false
-        enemyProjectile.physicsBody?.categoryBitMask = physicsCategory.enemyProjectile
-        enemyProjectile.physicsBody?.contactTestBitMask = physicsCategory.player
-        enemyProjectile.physicsBody?.collisionBitMask = 0
-        enemyProjectile.physicsBody?.isDynamic = true
-        enemyProjectile.zPosition = -1
+        let position = CGPoint(x: enemyTemp.position.x, y: enemyTemp.position.y)
+        let enemyProjectile = BattleShipProjectileNode(imageNamed: "missile30x80", initialPosition: position)
         
         let moveForward = SKAction.moveTo(y: -1000, duration: enemyProjectileSpeed)
         let scale = SKAction.scale(to: 0.2, duration: 0.1)
@@ -318,17 +251,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // make sure x coordinate is within screen bounds
         let x = (screenWidthFromMid > 100) ? (screenWidthFromMid - 100) : screenWidthFromMid
         let xPosition = Int.random(in: -x ... x)
-        let battleShip = SKSpriteNode(imageNamed: "battleship")
         let yPosition = screenHeightFromMid + 200
-        battleShip.position = CGPoint(x: xPosition, y: yPosition)
-        battleShip.physicsBody = SKPhysicsBody(rectangleOf: enemy!.size)
-        battleShip.physicsBody?.affectedByGravity = false
-        battleShip.physicsBody?.categoryBitMask = physicsCategory.enemyBattleShip
-        battleShip.physicsBody?.contactTestBitMask = physicsCategory.playerProjectile
-        battleShip.physicsBody?.collisionBitMask = 0
-        battleShip.physicsBody?.allowsRotation = false
-        battleShip.physicsBody?.isDynamic = true
-        battleShip.zPosition = -3
+        let position = CGPoint(x: xPosition, y: yPosition)
+        let battleShip = BattleShipNode(imageNamed: "battleship", initialPosition: position)
         
         let yPos = CGFloat(-1 * yPosition)
         let moveForward = SKAction.moveTo(y: yPos, duration: enemyBattleShipSpeed)
@@ -342,31 +267,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(battleShip)
     }
     
-    fileprivate func spawnTreeGroup() {
-        let yCoord = Int(self.frame.size.height) / 2
-        let xCoord = Int(self.frame.size.width) / 2
-        let xPosition = Int.random(in: -xCoord ... xCoord)
-        let treeGroup = SKSpriteNode(imageNamed: "tree_group_dark")
-        treeGroup.position = CGPoint(x: xPosition, y: yCoord)
-        treeGroup.zPosition = -2
-        
-        let yPos = CGFloat(-1 * yCoord)
-        let moveForward = SKAction.moveTo(y: yPos, duration: 10.0)
-        let destroy = SKAction.removeFromParent()
-        
-        treeGroup.run(SKAction.sequence([moveForward, destroy]))
-        self.addChild(treeGroup)
-    }
-    
     fileprivate func spawnEnemyExplosion(enemyTemp: SKSpriteNode){
-        let explosion = SKSpriteNode(imageNamed: "sabog_100px")
-        explosion.position = CGPoint(x: enemyTemp.position.x, y: enemyTemp.position.y)
-        explosion.physicsBody = SKPhysicsBody(rectangleOf: explosion.size)
-        explosion.physicsBody?.affectedByGravity = false
-        explosion.physicsBody?.allowsRotation = false
-        explosion.physicsBody?.isDynamic = false
-        explosion.physicsBody?.affectedByGravity = false
-        explosion.zPosition = 1
+        let position = CGPoint(x: enemyTemp.position.x, y: enemyTemp.position.y)
+        let explosion = EnemyExplosionNode(imageNamed: "sabog_100px", initialPosition: position)
         
         let yCoord = Int(self.frame.size.height) / 2
         let yPos = CGFloat(-1 * yCoord)
@@ -422,10 +325,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enemyTemp.run(SKAction.repeat(sequence, count: repeatCount))
     }
     
-    fileprivate func randomEnemyTimerSpawn() {
+    fileprivate func randomAmericanPlaneTimerSpawn() {
         let spawnEnemyTimer = SKAction.wait(forDuration: enemySpawnRate)
         let spawn = SKAction.run {
-            self.spawnEnemy()
+            self.spawnAmericanEnemyPlane()
         }
         let sequence = SKAction.sequence([spawnEnemyTimer, spawn])
         self.run(SKAction.repeatForever(sequence))
@@ -434,7 +337,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     fileprivate func randomGermanPlaneTimerSpawn() {
         let spawnGermanPlaneTimer = SKAction.wait(forDuration: enemyGermanPlaneSpawnRate)
         let spawn = SKAction.run {
-            self.spawnGermanPlane()
+            self.spawnEnemyGermanPlane()
         }
         let sequence = SKAction.sequence([spawnGermanPlaneTimer, spawn])
         self.run(SKAction.repeatForever(sequence))
@@ -446,15 +349,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.spawnEnemyBattleShip()
         }
         let sequence = SKAction.sequence([spawnEnemyTimer, spawn])
-        self.run(SKAction.repeatForever(sequence))
-    }
-    
-    fileprivate func randomTreeGroupTimerSpawn() {
-        let spawnTreeGroupTimer = SKAction.wait(forDuration: treeGroupSpawnRate)
-        let spawn = SKAction.run {
-            self.spawnTreeGroup()
-        }
-        let sequence = SKAction.sequence([spawnTreeGroupTimer, spawn])
         self.run(SKAction.repeatForever(sequence))
     }
     

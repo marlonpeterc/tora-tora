@@ -21,9 +21,18 @@
 		74D77D3D21C8D89000E45C68 /* TitleScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 74D77D3C21C8D89000E45C68 /* TitleScene.sks */; };
 		74D77D4321CC3F0A00E45C68 /* CheeZeeJungle.caf in Resources */ = {isa = PBXBuildFile; fileRef = 74D77D3F21CC3F0A00E45C68 /* CheeZeeJungle.caf */; };
 		74D77D4D21CC4FF200E45C68 /* gunshot.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 74D77D4C21CC4FF200E45C68 /* gunshot.mp3 */; };
-		74D77D4F21CC518500E45C68 /* Explosion.wav in Resources */ = {isa = PBXBuildFile; fileRef = 74D77D4E21CC518500E45C68 /* Explosion.wav */; };
+		74D77D4F21CC518500E45C68 /* explosion.wav in Resources */ = {isa = PBXBuildFile; fileRef = 74D77D4E21CC518500E45C68 /* explosion.wav */; };
 		74D77D5121CC545600E45C68 /* missile01.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 74D77D5021CC545600E45C68 /* missile01.mp3 */; };
 		74D77D5321CC555C00E45C68 /* missile02.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 74D77D5221CC555C00E45C68 /* missile02.mp3 */; };
+		74D77D5521D189D300E45C68 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D5421D189D300E45C68 /* Constants.swift */; };
+		74D77D5721D18C2D00E45C68 /* PlayerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D5621D18C2D00E45C68 /* PlayerNode.swift */; };
+		74D77D5921D196CE00E45C68 /* PlayerProjectileNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D5821D196CE00E45C68 /* PlayerProjectileNode.swift */; };
+		74D77D5B21D19FC600E45C68 /* BattleShipNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D5A21D19FC600E45C68 /* BattleShipNode.swift */; };
+		74D77D5D21D1A0FF00E45C68 /* EnemyExplosionNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D5C21D1A0FF00E45C68 /* EnemyExplosionNode.swift */; };
+		74D77D5F21D1A1D000E45C68 /* EnemyProjectileNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D5E21D1A1D000E45C68 /* EnemyProjectileNode.swift */; };
+		74D77D6121D1A2D100E45C68 /* BattleShipProjectileNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D6021D1A2D100E45C68 /* BattleShipProjectileNode.swift */; };
+		74D77D6321D1A39D00E45C68 /* EnemyGermanPlaneNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D6221D1A39D00E45C68 /* EnemyGermanPlaneNode.swift */; };
+		74D77D6521D1A44A00E45C68 /* EnemyAmericanPlaneNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D6421D1A44A00E45C68 /* EnemyAmericanPlaneNode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,9 +73,18 @@
 		74D77D3C21C8D89000E45C68 /* TitleScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TitleScene.sks; sourceTree = "<group>"; };
 		74D77D3F21CC3F0A00E45C68 /* CheeZeeJungle.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = CheeZeeJungle.caf; path = "../../../../Downloads/SnipTheVine finished/SnipTheVine/CheeZeeJungle.caf"; sourceTree = "<group>"; };
 		74D77D4C21CC4FF200E45C68 /* gunshot.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = gunshot.mp3; path = ../../../../Documents/ToraTora/gunshot.mp3; sourceTree = "<group>"; };
-		74D77D4E21CC518500E45C68 /* Explosion.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = Explosion.wav; path = ../../../../Downloads/Explosion.wav; sourceTree = "<group>"; };
+		74D77D4E21CC518500E45C68 /* explosion.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = explosion.wav; path = ../../../../Downloads/explosion.wav; sourceTree = "<group>"; };
 		74D77D5021CC545600E45C68 /* missile01.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = missile01.mp3; path = ../../../../Downloads/missile01.mp3; sourceTree = "<group>"; };
 		74D77D5221CC555C00E45C68 /* missile02.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = missile02.mp3; path = ../../../../Downloads/missile02.mp3; sourceTree = "<group>"; };
+		74D77D5421D189D300E45C68 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		74D77D5621D18C2D00E45C68 /* PlayerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerNode.swift; sourceTree = "<group>"; };
+		74D77D5821D196CE00E45C68 /* PlayerProjectileNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProjectileNode.swift; sourceTree = "<group>"; };
+		74D77D5A21D19FC600E45C68 /* BattleShipNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleShipNode.swift; sourceTree = "<group>"; };
+		74D77D5C21D1A0FF00E45C68 /* EnemyExplosionNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyExplosionNode.swift; sourceTree = "<group>"; };
+		74D77D5E21D1A1D000E45C68 /* EnemyProjectileNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyProjectileNode.swift; sourceTree = "<group>"; };
+		74D77D6021D1A2D100E45C68 /* BattleShipProjectileNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleShipProjectileNode.swift; sourceTree = "<group>"; };
+		74D77D6221D1A39D00E45C68 /* EnemyGermanPlaneNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyGermanPlaneNode.swift; sourceTree = "<group>"; };
+		74D77D6421D1A44A00E45C68 /* EnemyAmericanPlaneNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyAmericanPlaneNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,7 +137,7 @@
 			children = (
 				74D77D5221CC555C00E45C68 /* missile02.mp3 */,
 				74D77D5021CC545600E45C68 /* missile01.mp3 */,
-				74D77D4E21CC518500E45C68 /* Explosion.wav */,
+				74D77D4E21CC518500E45C68 /* explosion.wav */,
 				74D77D4C21CC4FF200E45C68 /* gunshot.mp3 */,
 				74D77D3F21CC3F0A00E45C68 /* CheeZeeJungle.caf */,
 				74D77D0621C8452100E45C68 /* AppDelegate.swift */,
@@ -133,6 +151,15 @@
 				74D77D1821C8452200E45C68 /* Info.plist */,
 				74D77D3A21C8D85700E45C68 /* TitleScene.swift */,
 				74D77D3C21C8D89000E45C68 /* TitleScene.sks */,
+				74D77D5421D189D300E45C68 /* Constants.swift */,
+				74D77D5621D18C2D00E45C68 /* PlayerNode.swift */,
+				74D77D5821D196CE00E45C68 /* PlayerProjectileNode.swift */,
+				74D77D5A21D19FC600E45C68 /* BattleShipNode.swift */,
+				74D77D5C21D1A0FF00E45C68 /* EnemyExplosionNode.swift */,
+				74D77D5E21D1A1D000E45C68 /* EnemyProjectileNode.swift */,
+				74D77D6021D1A2D100E45C68 /* BattleShipProjectileNode.swift */,
+				74D77D6221D1A39D00E45C68 /* EnemyGermanPlaneNode.swift */,
+				74D77D6421D1A44A00E45C68 /* EnemyAmericanPlaneNode.swift */,
 			);
 			path = ToraTora;
 			sourceTree = "<group>";
@@ -262,7 +289,7 @@
 				74D77D1221C8452100E45C68 /* Main.storyboard in Resources */,
 				74D77D0921C8452100E45C68 /* GameScene.sks in Resources */,
 				74D77D5121CC545600E45C68 /* missile01.mp3 in Resources */,
-				74D77D4F21CC518500E45C68 /* Explosion.wav in Resources */,
+				74D77D4F21CC518500E45C68 /* explosion.wav in Resources */,
 				74D77D1421C8452200E45C68 /* Assets.xcassets in Resources */,
 				74D77D1721C8452200E45C68 /* LaunchScreen.storyboard in Resources */,
 				74D77D4D21CC4FF200E45C68 /* gunshot.mp3 in Resources */,
@@ -294,9 +321,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74D77D5521D189D300E45C68 /* Constants.swift in Sources */,
+				74D77D5F21D1A1D000E45C68 /* EnemyProjectileNode.swift in Sources */,
 				74D77D0D21C8452100E45C68 /* GameScene.swift in Sources */,
+				74D77D6521D1A44A00E45C68 /* EnemyAmericanPlaneNode.swift in Sources */,
+				74D77D6321D1A39D00E45C68 /* EnemyGermanPlaneNode.swift in Sources */,
+				74D77D5D21D1A0FF00E45C68 /* EnemyExplosionNode.swift in Sources */,
+				74D77D6121D1A2D100E45C68 /* BattleShipProjectileNode.swift in Sources */,
 				74D77D0F21C8452100E45C68 /* GameViewController.swift in Sources */,
 				74D77D0721C8452100E45C68 /* AppDelegate.swift in Sources */,
+				74D77D5921D196CE00E45C68 /* PlayerProjectileNode.swift in Sources */,
+				74D77D5B21D19FC600E45C68 /* BattleShipNode.swift in Sources */,
+				74D77D5721D18C2D00E45C68 /* PlayerNode.swift in Sources */,
 				74D77D3B21C8D85700E45C68 /* TitleScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
