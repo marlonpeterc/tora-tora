@@ -9,7 +9,7 @@
 import Foundation
 import SpriteKit
 
-class BattleShipNode : SKSpriteNode {
+class BattleShipNode : BaseNode {
     
     convenience init(imageNamed: String, initialPosition: CGPoint) {
         self.init(imageNamed: imageNamed)
@@ -22,6 +22,7 @@ class BattleShipNode : SKSpriteNode {
         physicsBody?.allowsRotation = false
         physicsBody?.isDynamic = true
         zPosition = -3
+        maxAllowedHitCount = 12
     }
     
 }

@@ -9,18 +9,19 @@
 import Foundation
 import SpriteKit
 
-class EnemyAmericanPlaneNode : SKSpriteNode {
+class EnemyAmericanPlaneNode : BaseNode {
     
     convenience init(imageNamed: String, initialPosition: CGPoint) {
         self.init(imageNamed: imageNamed)
         position = initialPosition
         physicsBody = SKPhysicsBody(rectangleOf: size)
         physicsBody?.affectedByGravity = false
-        physicsBody?.categoryBitMask = physicsCategory.enemy
+        physicsBody?.categoryBitMask = physicsCategory.americanEnemyPlane
         physicsBody?.contactTestBitMask = physicsCategory.playerProjectile
         physicsBody?.collisionBitMask = 0
         physicsBody?.allowsRotation = false
         physicsBody?.isDynamic = true
+        maxAllowedHitCount = 1
     }
     
 }

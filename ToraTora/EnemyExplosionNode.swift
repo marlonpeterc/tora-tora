@@ -9,7 +9,7 @@
 import Foundation
 import SpriteKit
 
-class EnemyExplosionNode : SKSpriteNode {
+class EnemyExplosionNode : BaseNode {
     
     convenience init(imageNamed: String, initialPosition: CGPoint) {
         self.init(imageNamed: imageNamed)

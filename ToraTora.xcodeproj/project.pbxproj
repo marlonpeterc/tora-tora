@@ -33,6 +33,10 @@
 		74D77D6121D1A2D100E45C68 /* BattleShipProjectileNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D6021D1A2D100E45C68 /* BattleShipProjectileNode.swift */; };
 		74D77D6321D1A39D00E45C68 /* EnemyGermanPlaneNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D6221D1A39D00E45C68 /* EnemyGermanPlaneNode.swift */; };
 		74D77D6521D1A44A00E45C68 /* EnemyAmericanPlaneNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D6421D1A44A00E45C68 /* EnemyAmericanPlaneNode.swift */; };
+		74D77D6721D448BB00E45C68 /* Hittable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D6621D448BB00E45C68 /* Hittable.swift */; };
+		74D77D6921D44CA600E45C68 /* Destroyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D6821D44CA600E45C68 /* Destroyable.swift */; };
+		74D77D6B21D459AC00E45C68 /* BaseNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D6A21D459AC00E45C68 /* BaseNode.swift */; };
+		74D77D7121D4690D00E45C68 /* bulletimpact.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 74D77D7021D4690D00E45C68 /* bulletimpact.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +89,10 @@
 		74D77D6021D1A2D100E45C68 /* BattleShipProjectileNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleShipProjectileNode.swift; sourceTree = "<group>"; };
 		74D77D6221D1A39D00E45C68 /* EnemyGermanPlaneNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyGermanPlaneNode.swift; sourceTree = "<group>"; };
 		74D77D6421D1A44A00E45C68 /* EnemyAmericanPlaneNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyAmericanPlaneNode.swift; sourceTree = "<group>"; };
+		74D77D6621D448BB00E45C68 /* Hittable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hittable.swift; sourceTree = "<group>"; };
+		74D77D6821D44CA600E45C68 /* Destroyable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Destroyable.swift; sourceTree = "<group>"; };
+		74D77D6A21D459AC00E45C68 /* BaseNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNode.swift; sourceTree = "<group>"; };
+		74D77D7021D4690D00E45C68 /* bulletimpact.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = bulletimpact.mp3; path = ../../../../Documents/ToraTora/bulletimpact.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +143,7 @@
 		74D77D0521C8452100E45C68 /* ToraTora */ = {
 			isa = PBXGroup;
 			children = (
+				74D77D7021D4690D00E45C68 /* bulletimpact.mp3 */,
 				74D77D5221CC555C00E45C68 /* missile02.mp3 */,
 				74D77D5021CC545600E45C68 /* missile01.mp3 */,
 				74D77D4E21CC518500E45C68 /* explosion.wav */,
@@ -160,6 +169,9 @@
 				74D77D6021D1A2D100E45C68 /* BattleShipProjectileNode.swift */,
 				74D77D6221D1A39D00E45C68 /* EnemyGermanPlaneNode.swift */,
 				74D77D6421D1A44A00E45C68 /* EnemyAmericanPlaneNode.swift */,
+				74D77D6621D448BB00E45C68 /* Hittable.swift */,
+				74D77D6821D44CA600E45C68 /* Destroyable.swift */,
+				74D77D6A21D459AC00E45C68 /* BaseNode.swift */,
 			);
 			path = ToraTora;
 			sourceTree = "<group>";
@@ -290,6 +302,7 @@
 				74D77D0921C8452100E45C68 /* GameScene.sks in Resources */,
 				74D77D5121CC545600E45C68 /* missile01.mp3 in Resources */,
 				74D77D4F21CC518500E45C68 /* explosion.wav in Resources */,
+				74D77D7121D4690D00E45C68 /* bulletimpact.mp3 in Resources */,
 				74D77D1421C8452200E45C68 /* Assets.xcassets in Resources */,
 				74D77D1721C8452200E45C68 /* LaunchScreen.storyboard in Resources */,
 				74D77D4D21CC4FF200E45C68 /* gunshot.mp3 in Resources */,
@@ -327,8 +340,11 @@
 				74D77D6521D1A44A00E45C68 /* EnemyAmericanPlaneNode.swift in Sources */,
 				74D77D6321D1A39D00E45C68 /* EnemyGermanPlaneNode.swift in Sources */,
 				74D77D5D21D1A0FF00E45C68 /* EnemyExplosionNode.swift in Sources */,
+				74D77D6921D44CA600E45C68 /* Destroyable.swift in Sources */,
 				74D77D6121D1A2D100E45C68 /* BattleShipProjectileNode.swift in Sources */,
 				74D77D0F21C8452100E45C68 /* GameViewController.swift in Sources */,
+				74D77D6721D448BB00E45C68 /* Hittable.swift in Sources */,
+				74D77D6B21D459AC00E45C68 /* BaseNode.swift in Sources */,
 				74D77D0721C8452100E45C68 /* AppDelegate.swift in Sources */,
 				74D77D5921D196CE00E45C68 /* PlayerProjectileNode.swift in Sources */,
 				74D77D5B21D19FC600E45C68 /* BattleShipNode.swift in Sources */,

@@ -9,7 +9,7 @@
 import Foundation
 import SpriteKit
 
-class PlayerNode : SKSpriteNode {
+class PlayerNode : BaseNode {
     
     convenience init(imageNamed: String, initialPosition: CGPoint) {
         self.init(imageNamed: imageNamed)
@@ -17,10 +17,11 @@ class PlayerNode : SKSpriteNode {
         physicsBody = SKPhysicsBody(rectangleOf: size)
         physicsBody?.affectedByGravity = false
         physicsBody?.categoryBitMask = physicsCategory.player
-        physicsBody?.contactTestBitMask = physicsCategory.enemy
+        physicsBody?.contactTestBitMask = physicsCategory.americanEnemyPlane | physicsCategory.germanEnemyPlane
         physicsBody?.collisionBitMask = 0
         physicsBody?.isDynamic = false
         zPosition = 1000
+        maxAllowedHitCount = 1
     }
     
 }

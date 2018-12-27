@@ -23,7 +23,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var playerProjectileSpeed = 0.9
     private var enemySpeed = 4.0
     private var enemyBattleShipSpeed = 10.0
-    private var enemySpawnRate = 0.6
+    private var enemySpawnRate = 1.6
     private var enemyGermanPlaneSpawnRate = 2.0
     private var enemyBattleShipSpawnRate = 10.0
     private var enemyProjectileSpeed = 2.0
@@ -41,6 +41,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var explodeSoundAction: SKAction!
     private var rocketSoundAction: SKAction!
     private var missileSoundAction: SKAction!
+    private var bulletImpactSoundAction: SKAction!
     
     override func didMove(to view: SKView) {
         self.physicsWorld.contactDelegate = self
@@ -89,58 +90,100 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let firstBody : SKPhysicsBody = contact.bodyA
         let secondBody : SKPhysicsBody = contact.bodyB
         
-        if (((firstBody.categoryBitMask == physicsCategory.playerProjectile) && (secondBody.categoryBitMask == physicsCategory.enemy)) ||
-            ((firstBody.categoryBitMask == physicsCategory.enemy) && (secondBody.categoryBitMask == physicsCategory.playerProjectile))) {
-            spawnEnemyExplosion(enemyTemp: firstBody.node as! SKSpriteNode)
-            projectileCollision(enemyTemp: firstBody.node as! SKSpriteNode, projectileTemp: secondBody.node as! SKSpriteNode)
+        // Player projectile and american enemy plane collision
+        if (((firstBody.categoryBitMask == physicsCategory.playerProjectile) && (secondBody.categoryBitMask == physicsCategory.americanEnemyPlane)) ||
+            ((firstBody.categoryBitMask == physicsCategory.americanEnemyPlane) && (secondBody.categoryBitMask == physicsCategory.playerProjectile))) {
+            singleProjectileCollision(enemyTemp: firstBody.node as! BaseNode, projectileTemp: secondBody.node as! BaseNode)
         }
         
-        if (((firstBody.categoryBitMask == physicsCategory.playerProjectile) && (secondBody.categoryBitMask == physicsCategory.germanPlane)) || ((firstBody.categoryBitMask == physicsCategory.germanPlane) && (secondBody.categoryBitMask == physicsCategory.playerProjectile))) {
-            spawnEnemyExplosion(enemyTemp: firstBody.node as! SKSpriteNode)
-            projectileCollision(enemyTemp: firstBody.node as! SKSpriteNode, projectileTemp: secondBody.node as! SKSpriteNode)
+        // Player projectile and german enemy plane collision
+        if (((firstBody.categoryBitMask == physicsCategory.playerProjectile) && (secondBody.categoryBitMask == physicsCategory.germanEnemyPlane)) ||
+            ((firstBody.categoryBitMask == physicsCategory.germanEnemyPlane) && (secondBody.categoryBitMask == physicsCategory.playerProjectile))) {
+            singleProjectileCollision(enemyTemp: firstBody.node as! BaseNode, projectileTemp: secondBody.node as! BaseNode)
         }
         
-        if (((firstBody.categoryBitMask == physicsCategory.enemy) && (secondBody.categoryBitMask == physicsCategory.player)) ||
-            ((firstBody.categoryBitMask == physicsCategory.player) && (secondBody.categoryBitMask == physicsCategory.enemy))) {
-            spawnPlayerExplosion(playerTemp: firstBody.node as! SKSpriteNode)
-            spawnEnemyExplosion(enemyTemp: secondBody.node as! SKSpriteNode)
-            enemyPlayerCollision(enemyTemp: firstBody.node as! SKSpriteNode, playerTemp: secondBody.node as! SKSpriteNode)
+        // Player projectile and enemy battle ship collision
+        if (((firstBody.categoryBitMask == physicsCategory.playerProjectile) && (secondBody.categoryBitMask == physicsCategory.enemyBattleShip)) ||
+            ((firstBody.categoryBitMask == physicsCategory.enemyBattleShip) && (secondBody.categoryBitMask == physicsCategory.playerProjectile))) {
+            multipleProjectileCollision(enemyTemp: firstBody.node as! BaseNode, projectileTemp: secondBody.node as! BaseNode)
         }
         
+        // Player plane and american enemy plane collision
+        if (((firstBody.categoryBitMask == physicsCategory.americanEnemyPlane) && (secondBody.categoryBitMask == physicsCategory.player)) ||
+            ((firstBody.categoryBitMask == physicsCategory.player) && (secondBody.categoryBitMask == physicsCategory.americanEnemyPlane))) {
+            enemyPlayerCollision(enemyTemp: firstBody.node as! BaseNode, playerTemp: secondBody.node as! BaseNode)
+        }
+        
+        // Player plane and german enemy plane collision
+        if (((firstBody.categoryBitMask == physicsCategory.germanEnemyPlane) && (secondBody.categoryBitMask == physicsCategory.player)) ||
+            ((firstBody.categoryBitMask == physicsCategory.player) && (secondBody.categoryBitMask == physicsCategory.germanEnemyPlane))) {
+            enemyPlayerCollision(enemyTemp: firstBody.node as! BaseNode, playerTemp: secondBody.node as! BaseNode)
+        }
+        
+        // Player plane and enemy projectile collision
         if (((firstBody.categoryBitMask == physicsCategory.player) && (secondBody.categoryBitMask == physicsCategory.enemyProjectile)) ||
             ((firstBody.categoryBitMask == physicsCategory.enemyProjectile) && (secondBody.categoryBitMask == physicsCategory.player))) {
-            spawnPlayerExplosion(playerTemp: firstBody.node as! SKSpriteNode)
-            enemyPlayerCollision(enemyTemp: firstBody.node as! SKSpriteNode, playerTemp: secondBody.node as! SKSpriteNode)
+            enemyProjectilePlayerCollision(enemyTemp: firstBody.node as! BaseNode, playerTemp: secondBody.node as! BaseNode)
         }
         
-        if (((firstBody.categoryBitMask == physicsCategory.playerProjectile) && (secondBody.categoryBitMask == physicsCategory.enemyProjectile)) || ((firstBody.categoryBitMask == physicsCategory.enemyProjectile) && (secondBody.categoryBitMask == physicsCategory.playerProjectile))) {
-            spawnEnemyExplosion(enemyTemp: firstBody.node as! SKSpriteNode)
-            enemyPlayerProjectileCollision(enemyProjectileTemp: firstBody.node as! SKSpriteNode, playerProjectileTemp: secondBody.node as! SKSpriteNode)
+        // Player projectile and enemy projectile collision
+        if (((firstBody.categoryBitMask == physicsCategory.playerProjectile) && (secondBody.categoryBitMask == physicsCategory.enemyProjectile)) ||
+            ((firstBody.categoryBitMask == physicsCategory.enemyProjectile) && (secondBody.categoryBitMask == physicsCategory.playerProjectile))) {
+            enemyPlayerProjectileCollision(enemyProjectileTemp: firstBody.node as! BaseNode, playerProjectileTemp: secondBody.node as! BaseNode)
         }
     }
     
-    fileprivate func projectileCollision(enemyTemp: SKSpriteNode, projectileTemp: SKSpriteNode) {
-        enemyTemp.removeFromParent()
-        projectileTemp.removeFromParent()
-        score = score + 1
-        updateScore()
+    fileprivate func multipleProjectileCollision(enemyTemp: BaseNode, projectileTemp: BaseNode) {
+        hitBoth(node1: enemyTemp, node2: projectileTemp)
+        if (bothWasDestroyed(node1: enemyTemp, node2: projectileTemp)) {
+            spawnEnemyExplosion(enemyTemp: enemyTemp)
+            score += 5
+            updateScore()
+        } else {
+            run(bulletImpactSoundAction)
+        }
     }
     
-    fileprivate func enemyPlayerCollision(enemyTemp: SKSpriteNode, playerTemp: SKSpriteNode) {
-        mainLabel?.fontSize = 50
-        mainLabel?.alpha = 1.0
-        mainLabel?.text = "Game Over"
-        playerIsAlive = false
-        enemyTemp.removeFromParent()
-        playerTemp.removeFromParent()
-        player?.removeFromParent()
-        self.removeAction(forKey: "projectileAction")
-        waitThenMoveToTitleScreen()
+    fileprivate func singleProjectileCollision(enemyTemp: BaseNode, projectileTemp: BaseNode) {
+        hitBoth(node1: enemyTemp, node2: projectileTemp)
+        if (bothWasDestroyed(node1: enemyTemp, node2: projectileTemp)) {
+            spawnEnemyExplosion(enemyTemp: enemyTemp)
+            score += 1
+            updateScore()
+        }
     }
-  
-    fileprivate func enemyPlayerProjectileCollision(enemyProjectileTemp: SKSpriteNode, playerProjectileTemp: SKSpriteNode) {
-        enemyProjectileTemp.removeFromParent()
-        playerProjectileTemp.removeFromParent()
+    
+    fileprivate func enemyPlayerCollision(enemyTemp: BaseNode, playerTemp: BaseNode) {
+        hitBoth(node1: playerTemp, node2: enemyTemp)
+        if (bothWasDestroyed(node1: playerTemp, node2: enemyTemp)) {
+            spawnPlayerExplosion(playerTemp: playerTemp)
+            spawnEnemyExplosion(enemyTemp: enemyTemp)
+            gameOver()
+        }
+    }
+    
+    fileprivate func enemyProjectilePlayerCollision(enemyTemp: BaseNode, playerTemp: BaseNode) {
+        hitBoth(node1: playerTemp, node2: enemyTemp)
+        if (bothWasDestroyed(node1: playerTemp, node2: enemyTemp)) {
+            spawnPlayerExplosion(playerTemp: playerTemp)
+            gameOver()
+        }
+    }
+    
+    fileprivate func enemyPlayerProjectileCollision(enemyProjectileTemp: BaseNode, playerProjectileTemp: BaseNode) {
+        hitBoth(node1: playerProjectileTemp, node2: enemyProjectileTemp)
+        if (bothWasDestroyed(node1: enemyProjectileTemp, node2: playerProjectileTemp)) {
+            spawnEnemyExplosion(enemyTemp: enemyProjectileTemp)
+        }
+    }
+    
+    fileprivate func hitBoth(node1: BaseNode, node2: BaseNode){
+        node1.hit()
+        node2.hit()
+    }
+    
+    fileprivate func bothWasDestroyed(node1: BaseNode, node2: BaseNode) -> Bool {
+        return node1.wasDestroyed() && node2.wasDestroyed()
     }
     
     fileprivate func waitThenMoveToTitleScreen() {
@@ -150,6 +193,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         let sequence = SKAction.sequence([wait, transition])
         self.run(SKAction.repeat(sequence, count: 1))
+    }
+    
+    fileprivate func gameOver() {
+        mainLabel?.fontSize = 50
+        mainLabel?.alpha = 1.0
+        mainLabel?.text = "Game Over"
+        playerIsAlive = false
+        player?.removeFromParent()
+        self.removeAction(forKey: "projectileAction")
+        waitThenMoveToTitleScreen()
     }
     
     fileprivate func spawnPlayer() {
@@ -209,7 +262,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return CGPoint(x: xPosition, y: screenHeightFromMid)
     }
     
-    fileprivate func runEnemyAction(enemyTemp: SKSpriteNode) {
+    fileprivate func runEnemyAction(enemyTemp: BaseNode) {
         let yPos = CGFloat(-1 * screenHeightFromMid)
         let moveForward = SKAction.moveTo(y: yPos, duration: enemySpeed)
         let fire = SKAction.run {
@@ -220,7 +273,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enemyTemp.run(SKAction.sequence([group, destroy]))
     }
     
-    fileprivate func spawnEnemyProjectile(enemyTemp: SKSpriteNode) {
+    fileprivate func spawnEnemyProjectile(enemyTemp: BaseNode) {
         let position = CGPoint(x: enemyTemp.position.x, y: enemyTemp.position.y)
         let enemyProjectile = EnemyProjectileNode(imageNamed: "missile", initialPosition: position)
         
@@ -233,7 +286,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(enemyProjectile)
     }
     
-    fileprivate func spawnEnemyBattleShipProjectile(enemyTemp: SKSpriteNode) {
+    fileprivate func spawnEnemyBattleShipProjectile(enemyTemp: BaseNode) {
         let position = CGPoint(x: enemyTemp.position.x, y: enemyTemp.position.y)
         let enemyProjectile = BattleShipProjectileNode(imageNamed: "missile30x80", initialPosition: position)
         
@@ -267,7 +320,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(battleShip)
     }
     
-    fileprivate func spawnEnemyExplosion(enemyTemp: SKSpriteNode){
+    fileprivate func spawnEnemyExplosion(enemyTemp: BaseNode){
         let position = CGPoint(x: enemyTemp.position.x, y: enemyTemp.position.y)
         let explosion = EnemyExplosionNode(imageNamed: "sabog_100px", initialPosition: position)
         
@@ -283,7 +336,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(explosion)
     }
     
-    fileprivate func spawnPlayerExplosion(playerTemp: SKSpriteNode){
+    fileprivate func spawnPlayerExplosion(playerTemp: BaseNode){
         let explosion = SKSpriteNode(imageNamed: "sabog_120px")
         explosion.position = CGPoint(x: playerTemp.position.x, y: playerTemp.position.y)
         explosion.zPosition = 1
@@ -306,7 +359,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.run(SKAction.repeatForever(sequence), withKey: "projectileAction")
     }
     
-    fileprivate func fireEnemyProjectile(enemyTemp: SKSpriteNode, repeatCount: Int) {
+    fileprivate func fireEnemyProjectile(enemyTemp: BaseNode, repeatCount: Int) {
         let fireProjectileTimer = SKAction.wait(forDuration: 0.5)
         let spawn = SKAction.run {
             self.spawnEnemyProjectile(enemyTemp: enemyTemp)
@@ -315,7 +368,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enemyTemp.run(SKAction.repeat(sequence, count: repeatCount))
     }
     
-    fileprivate func fireEnemyBattleShipProjectile(enemyTemp: SKSpriteNode, repeatCount: Int) {
+    fileprivate func fireEnemyBattleShipProjectile(enemyTemp: BaseNode, repeatCount: Int) {
         let fireProjectileTimer = SKAction.wait(forDuration: 0.2)
         let spawn = SKAction.run {
             self.run(self.rocketSoundAction)
@@ -391,5 +444,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         explodeSoundAction = SKAction.playSoundFileNamed(SoundFile.Explode, waitForCompletion: false)
         rocketSoundAction = SKAction.playSoundFileNamed(SoundFile.Rocket, waitForCompletion: false)
         missileSoundAction = SKAction.playSoundFileNamed(SoundFile.Missile, waitForCompletion: false)
+        bulletImpactSoundAction = SKAction.playSoundFileNamed(SoundFile.BulletImpact, waitForCompletion: false)
     }
 }
