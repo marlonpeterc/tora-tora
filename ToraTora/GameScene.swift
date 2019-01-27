@@ -18,6 +18,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private var scoreLabel : SKLabelNode?
     private var mainLabel : SKLabelNode?
+//    private var healthBar : SKSpriteNode?
+//    private var healthBarContainer : SKSpriteNode?
     
     private var playerFireProjectileRate = 0.2
     private var playerProjectileSpeed = 0.9
@@ -50,6 +52,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         playerYPosition = -1 * ((self.frame.size.height / 2) - 200)
         screenHeightFromMid = (Int(self.frame.size.height) / 2)
         screenWidthFromMid = (Int(self.frame.size.width) / 2)
+        
+//        healthBarContainer = SKSpriteNode(color: UIColor.red, size: CGSize(width: 60, height: 16))
+//        healthBarContainer?.position = CGPoint(x: 100, y: 100)
+//        addChild(healthBarContainer!)
+//        healthBar = SKSpriteNode(color: UIColor.green, size: CGSize(width: 50, height: 10))
+//        healthBar?.position = CGPoint(x: 101, y: 101)
+//        addChild(healthBar!)
         
         spawnPlayer()
         spawnScoreLabel()
@@ -155,9 +164,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     fileprivate func enemyPlayerCollision(enemyTemp: BaseNode, playerTemp: BaseNode) {
         hitBoth(node1: playerTemp, node2: enemyTemp)
-        if (bothWasDestroyed(node1: playerTemp, node2: enemyTemp)) {
+        if (playerTemp.wasDestroyed()) {
             spawnPlayerExplosion(playerTemp: playerTemp)
+        }
+        if (enemyTemp.wasDestroyed()) {
             spawnEnemyExplosion(enemyTemp: enemyTemp)
+        }
+        if (bothWasDestroyed(node1: playerTemp, node2: enemyTemp)) {
             gameOver()
         }
     }

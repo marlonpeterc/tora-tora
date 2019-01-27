@@ -21,7 +21,7 @@ class PlayerNode : BaseNode {
         physicsBody?.collisionBitMask = 0
         physicsBody?.isDynamic = false
         zPosition = 1000
-        maxAllowedHitCount = 1
+        maxAllowedHitCount = 5
     }
     
 }
