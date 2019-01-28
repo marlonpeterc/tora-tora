@@ -45,6 +45,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var missileSoundAction: SKAction!
     private var bulletImpactSoundAction: SKAction!
     
+    private let playerNormalTexture = SKTexture(imageNamed: "tora_tora_bida_plane_120px")
+    private let playerHitTexture = SKTexture(imageNamed: "tora_tora_bida_plane_120px_hit")
+    private let battleshipNormalTexture = SKTexture(imageNamed: "battleship")
+    private let battleshipHitTexture = SKTexture(imageNamed: "battleship_hit")
+    
     override func didMove(to view: SKView) {
         self.physicsWorld.contactDelegate = self
         self.backgroundColor = UIColor.init(red: (14.0/255.0), green: (70.0/255.0), blue: (140.0/255.0), alpha: 1)
@@ -114,7 +119,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Player projectile and enemy battle ship collision
         if (((firstBody.categoryBitMask == physicsCategory.playerProjectile) && (secondBody.categoryBitMask == physicsCategory.enemyBattleShip)) ||
             ((firstBody.categoryBitMask == physicsCategory.enemyBattleShip) && (secondBody.categoryBitMask == physicsCategory.playerProjectile))) {
-            multipleProjectileCollision(enemyTemp: firstBody.node as! BaseNode, projectileTemp: secondBody.node as! BaseNode)
+            multipleProjectileCollision(node1: firstBody.node as! BaseNode, node2: secondBody.node as! BaseNode)
         }
         
         // Player plane and american enemy plane collision
@@ -142,14 +147,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    fileprivate func multipleProjectileCollision(enemyTemp: BaseNode, projectileTemp: BaseNode) {
-        hitBoth(node1: enemyTemp, node2: projectileTemp)
-        if (bothWasDestroyed(node1: enemyTemp, node2: projectileTemp)) {
-            spawnEnemyExplosion(enemyTemp: enemyTemp)
+    fileprivate func multipleProjectileCollision(node1: BaseNode, node2: BaseNode) {
+        hitBoth(node1: node1, node2: node2)
+        if (bothWasDestroyed(node1: node1, node2: node2)) {
+            spawnEnemyExplosion(enemyTemp: node1)
             score += 5
             updateScore()
         } else {
-            run(bulletImpactSoundAction)
+            if node1 is BattleShipNode {
+                handleBattleshipTextureChange(ship: node1 as! BattleShipNode)
+            } else if node2 is BattleShipNode {
+                handleBattleshipTextureChange(ship: node2 as! BattleShipNode)
+            }
         }
     }
     
@@ -163,6 +172,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     fileprivate func enemyPlayerCollision(enemyTemp: BaseNode, playerTemp: BaseNode) {
+        handlePlayerTextureChange()
         hitBoth(node1: playerTemp, node2: enemyTemp)
         if (playerTemp.wasDestroyed()) {
             spawnPlayerExplosion(playerTemp: playerTemp)
@@ -176,6 +186,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     fileprivate func enemyProjectilePlayerCollision(enemyTemp: BaseNode, playerTemp: BaseNode) {
+        handlePlayerTextureChange()
         hitBoth(node1: playerTemp, node2: enemyTemp)
         if (bothWasDestroyed(node1: playerTemp, node2: enemyTemp)) {
             spawnPlayerExplosion(playerTemp: playerTemp)
@@ -197,6 +208,48 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     fileprivate func bothWasDestroyed(node1: BaseNode, node2: BaseNode) -> Bool {
         return node1.wasDestroyed() && node2.wasDestroyed()
+    }
+    
+    fileprivate func setPlayerHitTexture() {
+        self.player?.texture = playerHitTexture
+    }
+    
+    fileprivate func setPlayerNormalTexture() {
+        self.player?.texture = playerNormalTexture
+    }
+    
+    fileprivate func handlePlayerTextureChange() {
+        run(bulletImpactSoundAction)
+        let hit = SKAction.run {
+            self.setPlayerHitTexture()
+        }
+        let normal = SKAction.run {
+            self.setPlayerNormalTexture()
+        }
+        let wait = SKAction.wait(forDuration: 0.3)
+        let sequence = SKAction.sequence([hit, wait, normal])
+        self.run(sequence)
+    }
+    
+    fileprivate func setBattleshipHitTexture(ship: BattleShipNode) {
+        ship.texture = battleshipHitTexture
+    }
+    
+    fileprivate func setBattleshipNormalTexture(ship: BattleShipNode) {
+        ship.texture = battleshipNormalTexture
+    }
+    
+    fileprivate func handleBattleshipTextureChange(ship: BattleShipNode) {
+        run(bulletImpactSoundAction)
+        let hit = SKAction.run {
+            self.setBattleshipHitTexture(ship: ship)
+        }
+        let normal = SKAction.run {
+            self.setBattleshipNormalTexture(ship: ship)
+        }
+        let wait = SKAction.wait(forDuration: 0.3)
+        let sequence = SKAction.sequence([hit, wait, normal])
+        self.run(sequence)
     }
     
     fileprivate func waitThenMoveToTitleScreen() {
