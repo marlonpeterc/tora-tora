@@ -45,7 +45,7 @@ class TitleScene: SKScene {
     }
     
     func setUpPlayButton() {
-        btnPlay = UIButton(frame: CGRect(x: 100, y: 100, width: 320, height: 100))
+        btnPlay = UIButton(frame: CGRect(x: 100, y: 100, width: 256, height: 80))
         btnPlay.center = CGPoint(x: view!.frame.size.width / 2, y: view!.frame.size.height / 2)
         btnPlay.setBackgroundImage(UIImage(named: "play_button_normal"), for: .normal)
         btnPlay.setBackgroundImage(UIImage(named: "play_button_pressed"), for: .highlighted)
