@@ -8,11 +8,13 @@
 
 import Foundation
 import SpriteKit
+import AVFoundation
 
 class TitleScene: SKScene {
     
     private var btnPlay : UIButton!
     private var textColorHUD = UIColor(displayP3Red: 0.95, green: 0.95, blue: 0.95, alpha: 1.0)
+    private static var backgroundMusicPlayer: AVAudioPlayer!
     
     override func didMove(to view: SKView) {
         self.backgroundColor = UIColor.black
@@ -24,6 +26,22 @@ class TitleScene: SKScene {
         self.addChild(backgroundImage)
         
         setUpPlayButton()
+        
+        if TitleScene.backgroundMusicPlayer == nil {
+            let backgroundMusicURL = Bundle.main.url(forResource: SoundFile.BackgroundMusic, withExtension: nil)
+            
+            do {
+                let theme = try AVAudioPlayer(contentsOf: backgroundMusicURL!)
+                TitleScene.backgroundMusicPlayer = theme
+            } catch {
+                // Could not load background music file
+            }
+            TitleScene.backgroundMusicPlayer.numberOfLoops = -1
+        }
+        
+        if !TitleScene.backgroundMusicPlayer.isPlaying {
+            TitleScene.backgroundMusicPlayer.play()
+        }
     }
     
     func setUpPlayButton() {

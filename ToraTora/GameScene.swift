@@ -7,7 +7,6 @@
 //
 
 import SpriteKit
-import AVFoundation
 
 let textColorHUD = UIColor(displayP3Red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0)
 
@@ -38,7 +37,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var screenHeightFromMid : Int = 0
     private var screenWidthFromMid : Int = 0
     
-    private static var backgroundMusicPlayer: AVAudioPlayer!
     private var fireProjectileSoundAction: SKAction!
     private var explodeSoundAction: SKAction!
     private var rocketSoundAction: SKAction!
@@ -490,22 +488,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     fileprivate func setUpAudio() {
-        if GameScene.backgroundMusicPlayer == nil {
-            let backgroundMusicURL = Bundle.main.url(forResource: SoundFile.BackgroundMusic, withExtension: nil)
-            
-            do {
-                let theme = try AVAudioPlayer(contentsOf: backgroundMusicURL!)
-                GameScene.backgroundMusicPlayer = theme
-            } catch {
-                // Could not load background music file
-            }
-            GameScene.backgroundMusicPlayer.numberOfLoops = -1
-        }
-        
-        if !GameScene.backgroundMusicPlayer.isPlaying {
-            GameScene.backgroundMusicPlayer.play()
-        }
-        
         fireProjectileSoundAction = SKAction.playSoundFileNamed(SoundFile.FireProjectile, waitForCompletion: false)
         explodeSoundAction = SKAction.playSoundFileNamed(SoundFile.Explode, waitForCompletion: false)
         rocketSoundAction = SKAction.playSoundFileNamed(SoundFile.Rocket, waitForCompletion: false)

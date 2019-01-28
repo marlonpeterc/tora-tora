@@ -18,7 +18,7 @@ struct physicsCategory {
 }
 
 struct SoundFile {
-    static let BackgroundMusic = "CheeZeeJungle.caf"
+    static let BackgroundMusic = "bensound-highoctane.mp3"
     static let FireProjectile = "gunshot.mp3"
     static let Explode = "explosion.wav"
     static let Rocket = "missile01.mp3"

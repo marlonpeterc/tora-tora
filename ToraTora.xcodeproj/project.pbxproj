@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7472E97F21FEC07A00E15E6B /* bensound-highoctane.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7472E97E21FEC07A00E15E6B /* bensound-highoctane.mp3 */; };
 		74D77D0721C8452100E45C68 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D0621C8452100E45C68 /* AppDelegate.swift */; };
 		74D77D0921C8452100E45C68 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 74D77D0821C8452100E45C68 /* GameScene.sks */; };
 		74D77D0B21C8452100E45C68 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 74D77D0A21C8452100E45C68 /* Actions.sks */; };
@@ -19,7 +20,6 @@
 		74D77D2D21C8452200E45C68 /* ToraToraUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D2C21C8452200E45C68 /* ToraToraUITests.swift */; };
 		74D77D3B21C8D85700E45C68 /* TitleScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D77D3A21C8D85700E45C68 /* TitleScene.swift */; };
 		74D77D3D21C8D89000E45C68 /* TitleScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 74D77D3C21C8D89000E45C68 /* TitleScene.sks */; };
-		74D77D4321CC3F0A00E45C68 /* CheeZeeJungle.caf in Resources */ = {isa = PBXBuildFile; fileRef = 74D77D3F21CC3F0A00E45C68 /* CheeZeeJungle.caf */; };
 		74D77D4D21CC4FF200E45C68 /* gunshot.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 74D77D4C21CC4FF200E45C68 /* gunshot.mp3 */; };
 		74D77D4F21CC518500E45C68 /* explosion.wav in Resources */ = {isa = PBXBuildFile; fileRef = 74D77D4E21CC518500E45C68 /* explosion.wav */; };
 		74D77D5121CC545600E45C68 /* missile01.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 74D77D5021CC545600E45C68 /* missile01.mp3 */; };
@@ -57,6 +57,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7472E97E21FEC07A00E15E6B /* bensound-highoctane.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = "bensound-highoctane.mp3"; path = "../../../../Downloads/bensound-highoctane.mp3"; sourceTree = "<group>"; };
 		74D77D0321C8452100E45C68 /* ToraTora.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToraTora.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74D77D0621C8452100E45C68 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		74D77D0821C8452100E45C68 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -75,7 +76,6 @@
 		74D77D2E21C8452200E45C68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		74D77D3A21C8D85700E45C68 /* TitleScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleScene.swift; sourceTree = "<group>"; };
 		74D77D3C21C8D89000E45C68 /* TitleScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TitleScene.sks; sourceTree = "<group>"; };
-		74D77D3F21CC3F0A00E45C68 /* CheeZeeJungle.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = CheeZeeJungle.caf; path = "../../../../Downloads/SnipTheVine finished/SnipTheVine/CheeZeeJungle.caf"; sourceTree = "<group>"; };
 		74D77D4C21CC4FF200E45C68 /* gunshot.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = gunshot.mp3; path = ../../../../Documents/ToraTora/gunshot.mp3; sourceTree = "<group>"; };
 		74D77D4E21CC518500E45C68 /* explosion.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = explosion.wav; path = ../../../../Downloads/explosion.wav; sourceTree = "<group>"; };
 		74D77D5021CC545600E45C68 /* missile01.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = missile01.mp3; path = ../../../../Downloads/missile01.mp3; sourceTree = "<group>"; };
@@ -143,12 +143,12 @@
 		74D77D0521C8452100E45C68 /* ToraTora */ = {
 			isa = PBXGroup;
 			children = (
+				7472E97E21FEC07A00E15E6B /* bensound-highoctane.mp3 */,
 				74D77D7021D4690D00E45C68 /* bulletimpact.mp3 */,
 				74D77D5221CC555C00E45C68 /* missile02.mp3 */,
 				74D77D5021CC545600E45C68 /* missile01.mp3 */,
 				74D77D4E21CC518500E45C68 /* explosion.wav */,
 				74D77D4C21CC4FF200E45C68 /* gunshot.mp3 */,
-				74D77D3F21CC3F0A00E45C68 /* CheeZeeJungle.caf */,
 				74D77D0621C8452100E45C68 /* AppDelegate.swift */,
 				74D77D0821C8452100E45C68 /* GameScene.sks */,
 				74D77D0A21C8452100E45C68 /* Actions.sks */,
@@ -307,8 +307,8 @@
 				74D77D1721C8452200E45C68 /* LaunchScreen.storyboard in Resources */,
 				74D77D4D21CC4FF200E45C68 /* gunshot.mp3 in Resources */,
 				74D77D0B21C8452100E45C68 /* Actions.sks in Resources */,
+				7472E97F21FEC07A00E15E6B /* bensound-highoctane.mp3 in Resources */,
 				74D77D3D21C8D89000E45C68 /* TitleScene.sks in Resources */,
-				74D77D4321CC3F0A00E45C68 /* CheeZeeJungle.caf in Resources */,
 				74D77D5321CC555C00E45C68 /* missile02.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
